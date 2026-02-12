@@ -45,8 +45,8 @@ export function Sidebar({
     <div className="w-80 min-w-80 h-full bg-white border-l border-border flex flex-col overflow-y-auto">
       {/* Header */}
       <div className="p-4 border-b border-border">
-        <h1 className="text-lg font-bold tracking-tight">Maps SVG</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Print Map Editor</p>
+        <h1 className="text-lg font-bold tracking-tight">Print Map Editor</h1>
+        <p className="text-xs text-muted-foreground mt-0.5">Export maps for printing</p>
       </div>
 
       <div className="p-4 flex flex-col gap-5">

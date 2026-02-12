@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Print Map Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application for creating printable maps. Select paper size, orientation, and DPI, then export high-resolution PNG maps ready for printing.
 
-Currently, two official plugins are available:
+![Print Map Editor Screenshot](https://github.com/user-attachments/assets/05ef7635-a164-4197-8420-a846a61e21c6)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- Interactive map with OpenStreetMap data via OpenFreeMap (no API key required)
+- Paper sizes: A2, A3, A4, A5, Letter, Legal
+- Orientation: Portrait / Landscape
+- DPI: 150 / 300
+- Map styles: Positron (light), Bright, Liberty
+- Location search via Nominatim
+- PNG export with exact dimensions for printing
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React + TypeScript + Vite
+- Maplibre GL JS v5
+- Tailwind CSS v4
+- shadcn/ui components
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Install dependencies
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Start development server
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Build for production
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Or with devbox:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+devbox run dev
 ```
+
+## Usage
+
+1. Search for a location or pan/zoom the map
+2. Select paper size and orientation
+3. Adjust the map so the desired area is within the red dashed frame
+4. Choose DPI (300 for high quality print, 150 for smaller file size)
+5. Click "Export PNG" to download the map
+
+## License
+
+MIT
