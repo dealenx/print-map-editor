@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react"
 import type maplibregl from "maplibre-gl"
-import { MapView } from "@/components/MapView"
+import { MapView, type MapViewRef } from "@/components/MapView"
 import { Sidebar } from "@/components/Sidebar"
 import { PAPER_SIZES } from "@/lib/paper-sizes"
 import type { PaperSize, Orientation } from "@/lib/paper-sizes"
@@ -16,11 +16,9 @@ function App() {
   const [mapStyle, setMapStyle] = useState(DEFAULT_STYLE)
   const [exporting, setExporting] = useState(false)
   const [zoomInfo, setZoomInfo] = useState("")
-  const mapInstanceRef = useRef<maplibregl.Map | null>(null)
+  const mapViewRef = useRef<MapViewRef>(null)
 
   const handleMapReady = useCallback((map: maplibregl.Map) => {
-    mapInstanceRef.current = map
-
     const updateZoom = () => {
       const z = map.getZoom().toFixed(2)
       const center = map.getCenter()
@@ -32,9 +30,10 @@ function App() {
   }, [])
 
   const handleLocationSelect = useCallback(
-    (lng: number, lat: number, _name: string) => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.flyTo({
+    (lng: number, lat: number) => {
+      const map = mapViewRef.current?.getMap()
+      if (map) {
+        map.flyTo({
           center: [lng, lat],
           zoom: 13,
           duration: 1500,
@@ -45,16 +44,22 @@ function App() {
   )
 
   const handleExport = useCallback(async () => {
-    if (!mapInstanceRef.current) return
+    const map = mapViewRef.current?.getMap()
+    const bounds = mapViewRef.current?.getFrameBounds()
+    
+    if (!map || !bounds) {
+      alert("Map not ready")
+      return
+    }
+    
     setExporting(true)
     try {
-      const map = mapInstanceRef.current
       const px = getPaperPixels(paper, orientation, dpi)
       console.log(`Exporting ${paper.label} ${orientation} at ${dpi}dpi: ${px.width}x${px.height}px`)
+      console.log(`Bounds: SW(${bounds.getSouth().toFixed(4)}, ${bounds.getWest().toFixed(4)}) NE(${bounds.getNorth().toFixed(4)}, ${bounds.getEast().toFixed(4)})`)
 
       await exportMapToPng({
-        center: map.getCenter(),
-        zoom: map.getZoom(),
+        bounds,
         bearing: map.getBearing(),
         pitch: map.getPitch(),
         style: mapStyle,
@@ -75,6 +80,7 @@ function App() {
       {/* Map area */}
       <div className="flex-1 relative">
         <MapView
+          ref={mapViewRef}
           paper={paper}
           orientation={orientation}
           mapStyle={mapStyle}

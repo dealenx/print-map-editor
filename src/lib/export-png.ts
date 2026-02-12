@@ -3,8 +3,7 @@ import type { PaperSize, Orientation } from "./paper-sizes"
 import { getPaperPixels } from "./paper-sizes"
 
 export interface ExportOptions {
-  center: maplibregl.LngLatLike
-  zoom: number
+  bounds: maplibregl.LngLatBounds
   bearing: number
   pitch: number
   style: string
@@ -34,8 +33,8 @@ export async function exportMapToPng(options: ExportOptions): Promise<void> {
       const renderMap = new maplibregl.Map({
         container,
         style: options.style,
-        center: options.center,
-        zoom: options.zoom,
+        bounds: options.bounds,
+        fitBoundsOptions: { padding: 0 },
         bearing: options.bearing,
         pitch: options.pitch,
         interactive: false,
